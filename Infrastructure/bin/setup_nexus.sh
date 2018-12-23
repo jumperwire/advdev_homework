@@ -29,3 +29,7 @@ echo "Setting up Nexus in project $GUID-nexus"
 # oc new-app -f ../templates/nexus.yaml --param .....
 
 # To be Implemented by Student
+
+oc new-project $GUID-nexus --display-name "Shared Nexus"
+
+oc process -f ../templates/nexus.yaml | oc create -f - -n $GUID-nexus
