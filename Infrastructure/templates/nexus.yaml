@@ -51,6 +51,14 @@ objects:
       activeDeadlineSeconds: 21600
       recreateParams:
         timeoutSeconds: 600
+        post:
+          failurePolicy: Abort
+          execNewPod:
+            containerName: nexus3
+            command:
+              - "/bin/bash"
+              - "-c"
+              - "curl -o /tmp/setup_nexus3.sh -s https://raw.githubusercontent.com/redhat-gpte-devopsautomation/ocp_advanced_development_resources/master/nexus/setup_nexus3.sh; chmod +x /tmp/setup_nexus3.sh; /tmp/setup_nexus3.sh admin admin123 http://nexus3:8081"
       resources: {}
       rollingParams:
         intervalSeconds: 1
