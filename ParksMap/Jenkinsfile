@@ -20,7 +20,7 @@ podTemplate(
     // You need to build the application in directory `ParksMap`.
     // Also copy "../nexus_settings.xml" to your build directory
     // and replace 'GUID' in the file with your ${GUID} to point to >your< Nexus instance
-    def mvnCmd = "mvn ../nexus_settings.xml clean package spring-boot:repackage -DskipTests -Dcom.redhat.xpaas.repo.redhatga"
+    def mvnCmd = "mvn -s ../nexus_settings.xml"
 
     // Checkout Source Code
     stage('Checkout Source') {
@@ -46,7 +46,7 @@ podTemplate(
       // Do not run tests in this step
       stage('Build war') {
         echo "Building version ${devTag}"
-        sh "${mvnCmd} clean package -DskipTests=true"
+        sh "${mvnCmd} clean package spring-boot:repackage -DskipTests -Dcom.redhat.xpaas.repo.redhatga"
       }
 
       // Using Maven run the unit tests
