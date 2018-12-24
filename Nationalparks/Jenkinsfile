@@ -90,7 +90,7 @@ podTemplate(
 
         // Update the Config Map which contains the users for the Tasks application 
         sh "oc delete configmap nationalparks-config -n ${GUID}-parks-dev --ignore-not-found=true" 
-        sh "oc create configmap nationalparks-config --from-literal=\"APPNAME=MLB Parks (Dev)\" -n ${GUID}-parks-dev" 
+        sh "oc create configmap nationalparks-config --from-literal=\"APPNAME=National Parks (Dev)\" -n ${GUID}-parks-dev" 
 
         // Deploy the development application. 
         // Replace xyz-parks-dev with the name of your production project 
@@ -138,11 +138,11 @@ podTemplate(
         sh "oc delete configmap ${destApp}-config -n ${GUID}-parks-prod --ignore-not-found=true"
 
         if (destApp == "nationalparks-blue"){
-          sh "oc create configmap ${destApp}-config --from-literal=\"APPNAME=MLB Parks (Blue)\" -n ${GUID}-parks-prod"
+          sh "oc create configmap ${destApp}-config --from-literal=\"APPNAME=National Parks (Blue)\" -n ${GUID}-parks-prod"
         }
 
         if (destApp == "nationalparks-green"){
-          sh "oc create configmap ${destApp}-config --from-literal=\"APPNAME=MLB Parks (Green)\" -n ${GUID}-parks-prod"
+          sh "oc create configmap ${destApp}-config --from-literal=\"APPNAME=National Parks (Green)\" -n ${GUID}-parks-prod"
         }
 
         // Deploy the inactive application.
