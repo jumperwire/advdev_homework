@@ -113,7 +113,7 @@ objects:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftNewApp
-      openshift.io/image.dockerRepositoryCheck: 2018-12-23T16:53:26Z
+      openshift.io/image.dockerRepositoryCheck: 2018-12-24T10:35:28Z
     creationTimestamp: null
     generation: 2
     labels:
@@ -159,7 +159,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-23T16:55:37Z
+      - lastTransitionTime: 2018-12-24T10:40:50Z
         status: "True"
         type: Admitted
       host: nexus-registry-${GUID}-nexus.apps.na311.openshift.opentlc.com
@@ -187,7 +187,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-23T16:54:00Z
+      - lastTransitionTime: 2018-12-24T10:35:45Z
         status: "True"
         type: Admitted
       host: nexus3-${GUID}-nexus.apps.na311.openshift.opentlc.com
@@ -214,7 +214,7 @@ objects:
       controller: true
       kind: ReplicationController
       name: nexus3-2
-      uid: 6e6cd600-06d3-11e9-acf4-025f6b8bf8ee
+      uid: e0caea41-0767-11e9-acf4-025f6b8bf8ee
   spec:
     containers:
     - image: docker.io/sonatype/nexus3@sha256:262f9f2b5e61ebbee068a23acfdad8283d8b9285b9f99a8b38bb8c65b2a13071
@@ -257,27 +257,27 @@ objects:
           - MKNOD
           - SETGID
           - SETUID
-        runAsUser: 1038400000
+        runAsUser: 1039200000
       terminationMessagePath: /dev/termination-log
       terminationMessagePolicy: File
       volumeMounts:
       - mountPath: /nexus-data
         name: nexus3-volume-1
       - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-        name: default-token-jpgwp
+        name: default-token-bk4kp
         readOnly: true
     dnsPolicy: ClusterFirst
     imagePullSecrets:
-    - name: default-dockercfg-6jr56
-    nodeName: node3.na311.internal
+    - name: default-dockercfg-sn92l
+    nodeName: node2.na311.internal
     nodeSelector:
       node-role.kubernetes.io/compute: "true"
     restartPolicy: Always
     schedulerName: default-scheduler
     securityContext:
-      fsGroup: 1038400000
+      fsGroup: 1039200000
       seLinuxOptions:
-        level: s0:c196,c90
+        level: s0:c198,c97
     serviceAccount: default
     serviceAccountName: default
     terminationGracePeriodSeconds: 30
@@ -289,10 +289,10 @@ objects:
     - name: nexus3-volume-1
       persistentVolumeClaim:
         claimName: nexus-pvc
-    - name: default-token-jpgwp
+    - name: default-token-bk4kp
       secret:
         defaultMode: 420
-        secretName: default-token-jpgwp
+        secretName: default-token-bk4kp
   status:
     phase: Pending
     qosClass: Burstable
@@ -300,8 +300,8 @@ objects:
   kind: ReplicationController
   metadata:
     annotations:
-      openshift.io/deployer-pod.completed-at: 2018-12-23 16:53:33 +0000 UTC
-      openshift.io/deployer-pod.created-at: 2018-12-23 16:53:26 +0000 UTC
+      openshift.io/deployer-pod.completed-at: 2018-12-24 10:35:35 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2018-12-24 10:35:28 +0000 UTC
       openshift.io/deployer-pod.name: nexus3-1-deploy
       openshift.io/deployment-config.latest-version: "1"
       openshift.io/deployment-config.name: nexus3
@@ -309,7 +309,7 @@ objects:
       openshift.io/deployment.replicas: "1"
       openshift.io/deployment.status-reason: config change
       openshift.io/encoded-deployment-config: |
-        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"nexus3","namespace":"${GUID}-nexus","selfLink":"/apis/apps.openshift.io/v1/namespaces/${GUID}-nexus/deploymentconfigs/nexus3","uid":"43f79875-06d3-11e9-acf4-025f6b8bf8ee","resourceVersion":"6567765","generation":2,"creationTimestamp":"2018-12-23T16:53:25Z","labels":{"app":"nexus3"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["nexus3"],"from":{"kind":"ImageStreamTag","namespace":"${GUID}-nexus","name":"nexus3:latest"},"lastTriggeredImage":"docker.io/sonatype/nexus3@sha256:262f9f2b5e61ebbee068a23acfdad8283d8b9285b9f99a8b38bb8c65b2a13071"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"nexus3","deploymentconfig":"nexus3"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"nexus3","deploymentconfig":"nexus3"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"nexus3-volume-1","emptyDir":{}}],"containers":[{"name":"nexus3","image":"docker.io/sonatype/nexus3@sha256:262f9f2b5e61ebbee068a23acfdad8283d8b9285b9f99a8b38bb8c65b2a13071","ports":[{"containerPort":8081,"protocol":"TCP"}],"resources":{},"volumeMounts":[{"name":"nexus3-volume-1","mountPath":"/nexus-data"}],"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":1,"observedGeneration":1,"replicas":0,"updatedReplicas":0,"availableReplicas":0,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"False","lastUpdateTime":"2018-12-23T16:53:25Z","lastTransitionTime":"2018-12-23T16:53:25Z","message":"Deployment config does not have minimum availability."}]}}
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"nexus3","namespace":"${GUID}-nexus","selfLink":"/apis/apps.openshift.io/v1/namespaces/${GUID}-nexus/deploymentconfigs/nexus3","uid":"a0f9f948-0767-11e9-acf4-025f6b8bf8ee","resourceVersion":"6771129","generation":2,"creationTimestamp":"2018-12-24T10:35:27Z","labels":{"app":"nexus3"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["nexus3"],"from":{"kind":"ImageStreamTag","namespace":"${GUID}-nexus","name":"nexus3:latest"},"lastTriggeredImage":"docker.io/sonatype/nexus3@sha256:262f9f2b5e61ebbee068a23acfdad8283d8b9285b9f99a8b38bb8c65b2a13071"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"nexus3","deploymentconfig":"nexus3"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"nexus3","deploymentconfig":"nexus3"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"nexus3-volume-1","emptyDir":{}}],"containers":[{"name":"nexus3","image":"docker.io/sonatype/nexus3@sha256:262f9f2b5e61ebbee068a23acfdad8283d8b9285b9f99a8b38bb8c65b2a13071","ports":[{"containerPort":8081,"protocol":"TCP"}],"resources":{},"volumeMounts":[{"name":"nexus3-volume-1","mountPath":"/nexus-data"}],"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":1,"observedGeneration":1,"replicas":0,"updatedReplicas":0,"availableReplicas":0,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"False","lastUpdateTime":"2018-12-24T10:35:27Z","lastTransitionTime":"2018-12-24T10:35:27Z","message":"Deployment config does not have minimum availability."}]}}
     creationTimestamp: null
     generation: 1
     labels:
@@ -322,7 +322,7 @@ objects:
       controller: true
       kind: DeploymentConfig
       name: nexus3
-      uid: 43f79875-06d3-11e9-acf4-025f6b8bf8ee
+      uid: a0f9f948-0767-11e9-acf4-025f6b8bf8ee
   spec:
     replicas: 0
     selector:
@@ -369,8 +369,8 @@ objects:
   kind: ReplicationController
   metadata:
     annotations:
-      openshift.io/deployer-pod.completed-at: 2018-12-23 16:56:13 +0000 UTC
-      openshift.io/deployer-pod.created-at: 2018-12-23 16:54:37 +0000 UTC
+      openshift.io/deployer-pod.completed-at: 2018-12-24 10:39:10 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2018-12-24 10:37:14 +0000 UTC
       openshift.io/deployer-pod.name: nexus3-2-deploy
       openshift.io/deployment-config.latest-version: "2"
       openshift.io/deployment-config.name: nexus3
@@ -378,7 +378,7 @@ objects:
       openshift.io/deployment.replicas: "1"
       openshift.io/deployment.status-reason: config change
       openshift.io/encoded-deployment-config: |
-        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"nexus3","namespace":"${GUID}-nexus","selfLink":"/apis/apps.openshift.io/v1/namespaces/${GUID}-nexus/deploymentconfigs/nexus3","uid":"43f79875-06d3-11e9-acf4-025f6b8bf8ee","resourceVersion":"6568054","generation":9,"creationTimestamp":"2018-12-23T16:53:25Z","labels":{"app":"nexus3"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Recreate","recreateParams":{"timeoutSeconds":600},"rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["nexus3"],"from":{"kind":"ImageStreamTag","namespace":"${GUID}-nexus","name":"nexus3:latest"},"lastTriggeredImage":"docker.io/sonatype/nexus3@sha256:262f9f2b5e61ebbee068a23acfdad8283d8b9285b9f99a8b38bb8c65b2a13071"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"nexus3","deploymentconfig":"nexus3"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"nexus3","deploymentconfig":"nexus3"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"nexus3-volume-1","persistentVolumeClaim":{"claimName":"nexus-pvc"}}],"containers":[{"name":"nexus3","image":"docker.io/sonatype/nexus3@sha256:262f9f2b5e61ebbee068a23acfdad8283d8b9285b9f99a8b38bb8c65b2a13071","ports":[{"containerPort":8081,"protocol":"TCP"}],"resources":{"limits":{"cpu":"2","memory":"2Gi"},"requests":{"cpu":"500m","memory":"1Gi"}},"volumeMounts":[{"name":"nexus3-volume-1","mountPath":"/nexus-data"}],"livenessProbe":{"exec":{"command":["echo","ok"]},"initialDelaySeconds":60,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"readinessProbe":{"httpGet":{"path":"/","port":8081,"scheme":"HTTP"},"initialDelaySeconds":60,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":2,"observedGeneration":8,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2018-12-23T16:53:32Z","lastTransitionTime":"2018-12-23T16:53:32Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2018-12-23T16:53:34Z","lastTransitionTime":"2018-12-23T16:53:34Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"nexus3-1\" successfully rolled out"}],"readyReplicas":1}}
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"nexus3","namespace":"${GUID}-nexus","selfLink":"/apis/apps.openshift.io/v1/namespaces/${GUID}-nexus/deploymentconfigs/nexus3","uid":"a0f9f948-0767-11e9-acf4-025f6b8bf8ee","resourceVersion":"6771505","generation":9,"creationTimestamp":"2018-12-24T10:35:27Z","labels":{"app":"nexus3"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Recreate","recreateParams":{"timeoutSeconds":600},"rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["nexus3"],"from":{"kind":"ImageStreamTag","namespace":"${GUID}-nexus","name":"nexus3:latest"},"lastTriggeredImage":"docker.io/sonatype/nexus3@sha256:262f9f2b5e61ebbee068a23acfdad8283d8b9285b9f99a8b38bb8c65b2a13071"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"nexus3","deploymentconfig":"nexus3"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"nexus3","deploymentconfig":"nexus3"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"nexus3-volume-1","persistentVolumeClaim":{"claimName":"nexus-pvc"}}],"containers":[{"name":"nexus3","image":"docker.io/sonatype/nexus3@sha256:262f9f2b5e61ebbee068a23acfdad8283d8b9285b9f99a8b38bb8c65b2a13071","ports":[{"containerPort":8081,"protocol":"TCP"}],"resources":{"limits":{"cpu":"2","memory":"2Gi"},"requests":{"cpu":"500m","memory":"1Gi"}},"volumeMounts":[{"name":"nexus3-volume-1","mountPath":"/nexus-data"}],"livenessProbe":{"exec":{"command":["echo","ok"]},"initialDelaySeconds":60,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"readinessProbe":{"httpGet":{"path":"/","port":8081,"scheme":"HTTP"},"initialDelaySeconds":60,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":2,"observedGeneration":8,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2018-12-24T10:35:35Z","lastTransitionTime":"2018-12-24T10:35:35Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2018-12-24T10:35:36Z","lastTransitionTime":"2018-12-24T10:35:36Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"nexus3-1\" successfully rolled out"}],"readyReplicas":1}}
     creationTimestamp: null
     generation: 1
     labels:
@@ -391,7 +391,7 @@ objects:
       controller: true
       kind: DeploymentConfig
       name: nexus3
-      uid: 43f79875-06d3-11e9-acf4-025f6b8bf8ee
+      uid: a0f9f948-0767-11e9-acf4-025f6b8bf8ee
   spec:
     replicas: 1
     selector:
