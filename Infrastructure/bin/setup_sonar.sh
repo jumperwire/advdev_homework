@@ -16,4 +16,4 @@ echo "Setting up Sonarqube in project $GUID-sonarqube"
 # To be Implemented by Student
 oc new-project $GUID-sonarqube --display-name "Shared Sonarqube"
 
-oc process -f ./Infrastructure/templates/sonarqube.yaml | oc create -f - -n $GUID-nexus
+oc process -f ./Infrastructure/templates/sonarqube.yaml | oc create -f - -n $GUID-sonarqube
