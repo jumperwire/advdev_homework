@@ -13,8 +13,8 @@ podTemplate(
   ]
 ) {
   node('skopeo-pod') {
-    def GUID = '4d09'
-    def CLUSTER = 'na311'
+    def GUID = "4d09"
+    def CLUSTER = "na311"
     echo "GUID: ${GUID}"
     echo "CLUSTER: ${CLUSTER}"
 
