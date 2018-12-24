@@ -23,7 +23,7 @@ objects:
         openshift.io/imported-from: docker.io/sonatype/nexus3:latest
       from:
         kind: DockerImage
-        name: docker-registry.default.svc:5000/4d09-nexus/nexus3:latest
+        name: docker.io/sonatype/nexus3:latest
       generation: 2
       importPolicy: {}
       name: latest
