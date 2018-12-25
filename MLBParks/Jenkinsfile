@@ -75,9 +75,9 @@ podTemplate(
         // The filename is mlbparks.war in the 'target' directory of your current
         // Jenkins workspace
         // Replace xyz-parks-dev with the name of your dev project
-        sh "oc delete bc mlbparks -n ${GUID}-parks-dev || true"
+        //sh "oc delete bc mlbparks -n ${GUID}-parks-dev || true"
 
-        sh "oc new-build --name=mlbparks --binary=true  jboss-eap70-openshift:1.7 --to=${GUID}-parks-dev/mlbparks:${devTag} -e MAVEN_MIRROR_URL=http://nexus3-${GUID}-nexus.apps.na311.openshift.opentlc.com/repository/maven-all-public -n ${GUID}-parks-dev"
+        //sh "oc new-build --name=mlbparks --binary=true  jboss-eap70-openshift:1.7 --to=${GUID}-parks-dev/mlbparks:${devTag} -e MAVEN_MIRROR_URL=http://nexus3-${GUID}-nexus.apps.na311.openshift.opentlc.com/repository/maven-all-public -n ${GUID}-parks-dev"
 
         sh "oc start-build mlbparks --follow --from-file=./target/mlbparks.war -n ${GUID}-parks-dev"
       
