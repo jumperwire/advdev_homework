@@ -10,7 +10,7 @@ objects:
     annotations:
       openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:31:50Z
     creationTimestamp: null
-    generation: 2
+    generation: 1
     name: mlbparks-blue
   spec:
     lookupPolicy:
@@ -23,7 +23,7 @@ objects:
     annotations:
       openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:32:49Z
     creationTimestamp: null
-    generation: 2
+    generation: 1
     name: mlbparks-green
   spec:
     lookupPolicy:
@@ -36,7 +36,7 @@ objects:
     annotations:
       openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:37:45Z
     creationTimestamp: null
-    generation: 2
+    generation: 1
     name: nationalparks-blue
   spec:
     lookupPolicy:
@@ -49,7 +49,7 @@ objects:
     annotations:
       openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:38:13Z
     creationTimestamp: null
-    generation: 2
+    generation: 1
     name: nationalparks-green
   spec:
     lookupPolicy:
@@ -62,7 +62,7 @@ objects:
     annotations:
       openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:38:27Z
     creationTimestamp: null
-    generation: 2
+    generation: 1
     name: parksmap-blue
   spec:
     lookupPolicy:
@@ -75,7 +75,7 @@ objects:
     annotations:
       openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:38:39Z
     creationTimestamp: null
-    generation: 2
+    generation: 1
     name: parksmap-green
   spec:
     lookupPolicy:
@@ -121,7 +121,13 @@ objects:
           type: parksmap-backend
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0
+        - env:
+          - name: APPNAME
+            valueFrom:
+              configMapKeyRef:
+                key: APPNAME
+                name: mlbparks-blue-config
+          image: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0
           imagePullPolicy: IfNotPresent
           name: mlbparks-blue
           resources: {}
@@ -180,7 +186,13 @@ objects:
           type: parksmap-backend
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0
+        - env:
+          - name: APPNAME
+            valueFrom:
+              configMapKeyRef:
+                key: APPNAME
+                name: mlbparks-green-config
+          image: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0
           imagePullPolicy: IfNotPresent
           name: mlbparks-green
           resources: {}
@@ -239,7 +251,13 @@ objects:
           type: parksmap-backend
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:0.0
+        - env:
+          - name: APPNAME
+            valueFrom:
+              configMapKeyRef:
+                key: APPNAME
+                name: nationalparks-blue-config
+          image: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:0.0
           imagePullPolicy: IfNotPresent
           name: nationalparks-blue
           resources: {}
@@ -298,7 +316,13 @@ objects:
           type: parksmap-backend
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:0.0
+        - env:
+          - name: APPNAME
+            valueFrom:
+              configMapKeyRef:
+                key: APPNAME
+                name: nationalparks-green-config
+          image: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:0.0
           imagePullPolicy: IfNotPresent
           name: nationalparks-green
           resources: {}
@@ -354,7 +378,13 @@ objects:
           deploymentconfig: parksmap-blue
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/4d09-parks-dev/parksmap:0.0
+        - env:
+          - name: APPNAME
+            valueFrom:
+              configMapKeyRef:
+                key: APPNAME
+                name: parksmap-blue-config
+          image: docker-registry.default.svc:5000/4d09-parks-dev/parksmap:0.0
           imagePullPolicy: IfNotPresent
           name: parksmap-blue
           resources: {}
@@ -410,7 +440,13 @@ objects:
           deploymentconfig: parksmap-green
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/4d09-parks-dev/parksmap:0.0
+        - env:
+          - name: APPNAME
+            valueFrom:
+              configMapKeyRef:
+                key: APPNAME
+                name: parksmap-green-config
+          image: docker-registry.default.svc:5000/4d09-parks-dev/parksmap:0.0
           imagePullPolicy: IfNotPresent
           name: parksmap-green
           resources: {}
@@ -608,13 +644,13 @@ objects:
       targetPort: 8080
     to:
       kind: Service
-      name: mlbparks-blue
+      name: mlbparks-green
       weight: 100
     wildcardPolicy: None
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T14:32:35Z
+      - lastTransitionTime: 2018-12-25T15:33:48Z
         status: "True"
         type: Admitted
       host: mlbparks-4d09-parks-prod.apps.na311.openshift.opentlc.com
@@ -641,7 +677,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T14:37:59Z
+      - lastTransitionTime: 2018-12-25T15:33:48Z
         status: "True"
         type: Admitted
       host: nationalparks-4d09-parks-prod.apps.na311.openshift.opentlc.com
@@ -662,13 +698,13 @@ objects:
       targetPort: 8080
     to:
       kind: Service
-      name: parksmap-blue
+      name: parksmap-green
       weight: 100
     wildcardPolicy: None
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T14:38:29Z
+      - lastTransitionTime: 2018-12-25T15:33:48Z
         status: "True"
         type: Admitted
       host: parksmap-4d09-parks-prod.apps.na311.openshift.opentlc.com
@@ -725,6 +761,48 @@ objects:
       requests:
         storage: 4Gi
   status: {}
+- apiVersion: v1
+  data:
+    APPNAME: MLB Parks (Blue)
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: mlbparks-blue-config
+- apiVersion: v1
+  data:
+    APPNAME: MLB Parks (Green)
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: mlbparks-green-config
+- apiVersion: v1
+  data:
+    APPNAME: National Parks (Blue)
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: nationalparks-blue-config
+- apiVersion: v1
+  data:
+    APPNAME: National Parks (Green)
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: nationalparks-green-config
+- apiVersion: v1
+  data:
+    APPNAME: ParksMap (Blue)
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: parksmap-blue-config
+- apiVersion: v1
+  data:
+    APPNAME: ParksMap (Green)
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: parksmap-green-config
 - apiVersion: apps/v1
   kind: StatefulSet
   metadata:
