@@ -347,7 +347,6 @@ objects:
     resources:
       requests:
         storage: 4Gi
-    volumeName: vol139
   status: {}
 - apiVersion: v1
   kind: PersistentVolumeClaim
@@ -365,5 +364,4 @@ objects:
     resources:
       requests:
         storage: 4Gi
-    volumeName: vol95
   status: {}
