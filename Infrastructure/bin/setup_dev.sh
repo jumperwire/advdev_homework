@@ -17,3 +17,5 @@ oc new-project ${GUID}-parks-dev --display-name "Development Environment"
 oc policy add-role-to-user edit system:serviceaccount:${GUID}-jenkins:jenkins -n ${GUID}-parks-dev
 
 oc policy add-role-to-user view --serviceaccount=default -n 4d09-parks-dev
+
+oc process -f ./Infrastructure/templates/parks-dev.yaml | oc create -f - -n ${GUID}-parks-dev
