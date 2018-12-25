@@ -23,7 +23,7 @@ objects:
         openshift.io/imported-from: wkulhanek/sonarqube:6.7.5
       from:
         kind: DockerImage
-        name: docker-registry.default.svc:5000/4d09-sonarqube/sonarqube:6.7.5
+        name: wkulhanek/sonarqube:6.7.5
       generation: 2
       importPolicy: {}
       name: 6.7.5
