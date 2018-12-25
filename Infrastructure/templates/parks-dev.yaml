@@ -11,13 +11,41 @@ objects:
       openshift.io/generated-by: OpenShiftNewBuild
       openshift.io/image.dockerRepositoryCheck: 2018-12-25T15:16:33Z
     creationTimestamp: null
-    generation: 3
+    generation: 11
     labels:
       build: mlbparks
     name: mlbparks
   spec:
     lookupPolicy:
       local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0
+      generation: 11
+      importPolicy: {}
+      name: "0.0"
+      referencePolicy:
+        type: Source
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0-0
+      generation: 10
+      importPolicy: {}
+      name: 0.0-0
+      referencePolicy:
+        type: Source
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:latest
+      generation: null
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: ""
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -27,13 +55,41 @@ objects:
       openshift.io/generated-by: OpenShiftNewBuild
       openshift.io/image.dockerRepositoryCheck: 2018-12-25T15:17:03Z
     creationTimestamp: null
-    generation: 3
+    generation: 13
     labels:
       build: nationalparks
     name: nationalparks
   spec:
     lookupPolicy:
       local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:0.0
+      generation: 13
+      importPolicy: {}
+      name: "0.0"
+      referencePolicy:
+        type: Source
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:0.0-0
+      generation: 12
+      importPolicy: {}
+      name: 0.0-0
+      referencePolicy:
+        type: Source
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:latest
+      generation: null
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: ""
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -43,13 +99,41 @@ objects:
       openshift.io/generated-by: OpenShiftNewBuild
       openshift.io/image.dockerRepositoryCheck: 2018-12-25T15:17:15Z
     creationTimestamp: null
-    generation: 3
+    generation: 11
     labels:
       build: parksmap
     name: parksmap
   spec:
     lookupPolicy:
       local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/parksmap:0.0
+      generation: 11
+      importPolicy: {}
+      name: "0.0"
+      referencePolicy:
+        type: Source
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/parksmap:0.0-0
+      generation: 10
+      importPolicy: {}
+      name: 0.0-0
+      referencePolicy:
+        type: Source
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/parksmap:latest
+      generation: null
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: ""
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -98,7 +182,13 @@ objects:
           type: parksmap-backend
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0-0
+        - env:
+          - name: APPNAME
+            valueFrom:
+              configMapKeyRef:
+                key: APPNAME
+                name: mlbparks-config
+          image: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0-0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
@@ -304,7 +394,13 @@ objects:
           type: parksmap-backend
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:0.0-0
+        - env:
+          - name: APPNAME
+            valueFrom:
+              configMapKeyRef:
+                key: APPNAME
+                name: nationalparks-config
+          image: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:0.0-0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
@@ -380,7 +476,13 @@ objects:
           deploymentconfig: parksmap
       spec:
         containers:
-        - image: docker-registry.default.svc:5000/4d09-parks-dev/parksmap:0.0-0
+        - env:
+          - name: APPNAME
+            valueFrom:
+              configMapKeyRef:
+                key: APPNAME
+                name: parksmap-config
+          image: docker-registry.default.svc:5000/4d09-parks-dev/parksmap:0.0-0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
@@ -526,7 +628,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T15:16:34Z
+      - lastTransitionTime: 2018-12-25T15:33:43Z
         status: "True"
         type: Admitted
       host: mlbparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
@@ -554,7 +656,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T15:17:05Z
+      - lastTransitionTime: 2018-12-25T15:33:43Z
         status: "True"
         type: Admitted
       host: nationalparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
@@ -581,7 +683,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T15:17:17Z
+      - lastTransitionTime: 2018-12-25T15:33:43Z
         status: "True"
         type: Admitted
       host: parksmap-4d09-parks-dev.apps.na311.openshift.opentlc.com
@@ -743,3 +845,24 @@ objects:
       type: Generic
   status:
     lastVersion: 0
+- apiVersion: v1
+  data:
+    APPNAME: MLB Parks (Dev)
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: mlbparks-config
+- apiVersion: v1
+  data:
+    APPNAME: National Parks (Dev)
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: nationalparks-config
+- apiVersion: v1
+  data:
+    APPNAME: ParksMap (Dev)
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: parksmap-config
