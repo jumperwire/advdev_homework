@@ -9,7 +9,7 @@ objects:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftNewBuild
-      openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:48:51Z
+      openshift.io/image.dockerRepositoryCheck: 2018-12-25T15:16:33Z
     creationTimestamp: null
     generation: 3
     labels:
@@ -25,11 +25,11 @@ objects:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftNewBuild
-      openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:49:11Z
+      openshift.io/image.dockerRepositoryCheck: 2018-12-25T15:17:03Z
     creationTimestamp: null
     generation: 3
     labels:
-      type: parksmap-backend
+      build: nationalparks
     name: nationalparks
   spec:
     lookupPolicy:
@@ -41,7 +41,7 @@ objects:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftNewBuild
-      openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:49:28Z
+      openshift.io/image.dockerRepositoryCheck: 2018-12-25T15:17:15Z
     creationTimestamp: null
     generation: 3
     labels:
@@ -267,6 +267,7 @@ objects:
     generation: 1
     labels:
       app: nationalparks
+      type: parksmap-backend
     name: nationalparks
   spec:
     replicas: 1
@@ -274,6 +275,7 @@ objects:
     selector:
       app: nationalparks
       deploymentconfig: nationalparks
+      type: parksmap-backend
     strategy:
       activeDeadlineSeconds: 21600
       resources: {}
@@ -299,6 +301,7 @@ objects:
         labels:
           app: nationalparks
           deploymentconfig: nationalparks
+          type: parksmap-backend
       spec:
         containers:
         - image: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:0.0-0
@@ -467,6 +470,7 @@ objects:
     creationTimestamp: null
     labels:
       app: nationalparks
+      type: parksmap-backend
     name: nationalparks
   spec:
     ports:
@@ -476,6 +480,7 @@ objects:
     selector:
       app: nationalparks
       deploymentconfig: nationalparks
+      type: parksmap-backend
     sessionAffinity: None
     type: ClusterIP
   status:
@@ -521,7 +526,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T14:48:53Z
+      - lastTransitionTime: 2018-12-25T15:16:34Z
         status: "True"
         type: Admitted
       host: mlbparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
@@ -535,6 +540,7 @@ objects:
     creationTimestamp: null
     labels:
       app: nationalparks
+      type: parksmap-backend
     name: nationalparks
   spec:
     host: nationalparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
@@ -548,7 +554,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T14:49:13Z
+      - lastTransitionTime: 2018-12-25T15:17:05Z
         status: "True"
         type: Admitted
       host: nationalparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
@@ -575,7 +581,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T14:49:29Z
+      - lastTransitionTime: 2018-12-25T15:17:17Z
         status: "True"
         type: Admitted
       host: parksmap-4d09-parks-dev.apps.na311.openshift.opentlc.com
@@ -652,10 +658,10 @@ objects:
     successfulBuildsHistoryLimit: 5
     triggers:
     - github:
-        secret: L86LONZphiZKkwmd70R_
+        secret: -igL5r0i5ipVYj_q9PKD
       type: GitHub
     - generic:
-        secret: yULRi1FCWrBH75myI9vI
+        secret: rO5m8wQsDHfSavjOPZiC
       type: Generic
   status:
     lastVersion: 0
@@ -666,7 +672,7 @@ objects:
       openshift.io/generated-by: OpenShiftNewBuild
     creationTimestamp: null
     labels:
-      type: parksmap-backend
+      build: nationalparks
     name: nationalparks
   spec:
     failedBuildsHistoryLimit: 5
@@ -691,10 +697,10 @@ objects:
     successfulBuildsHistoryLimit: 5
     triggers:
     - github:
-        secret: 7N9xl7AuBGFCSDXm81Sx
+        secret: GcaKLzMxCJc-MisXkINK
       type: GitHub
     - generic:
-        secret: 3HTG7SDJ7fYcz25BF2-s
+        secret: HuMVHdFM9uztAcH4qO5d
       type: Generic
   status:
     lastVersion: 0
@@ -730,10 +736,10 @@ objects:
     successfulBuildsHistoryLimit: 5
     triggers:
     - github:
-        secret: G2y3EeIIJ0_pox3uGIst
+        secret: qOk3YRGlHnTsJUn3rG8t
       type: GitHub
     - generic:
-        secret: 4jycN-zaZXUMESvm74kB
+        secret: hQffV9BcxMvx8EcXs0qi
       type: Generic
   status:
     lastVersion: 0
