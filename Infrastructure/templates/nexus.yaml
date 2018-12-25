@@ -246,8 +246,6 @@ objects:
   kind: PersistentVolumeClaim
   metadata:
     annotations:
-      pv.kubernetes.io/bind-completed: "yes"
-      pv.kubernetes.io/bound-by-controller: "yes"
     creationTimestamp: null
     finalizers:
     - kubernetes.io/pvc-protection
@@ -258,5 +256,4 @@ objects:
     resources:
       requests:
         storage: 4Gi
-    volumeName: vol39
   status: {}
