@@ -9,7 +9,7 @@ objects:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftNewApp
-      openshift.io/image.dockerRepositoryCheck: 2018-12-25T08:23:55Z
+      openshift.io/image.dockerRepositoryCheck: 2018-12-25T09:05:20Z
     creationTimestamp: null
     generation: 2
     labels:
@@ -23,7 +23,7 @@ objects:
         openshift.io/imported-from: wkulhanek/sonarqube:6.7.5
       from:
         kind: DockerImage
-        name: wkulhanek/sonarqube:6.7.5
+        name: docker-registry.default.svc:5000/4d09-sonarqube/sonarqube:6.7.5
       generation: 2
       importPolicy: {}
       name: 6.7.5
@@ -321,7 +321,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T08:24:13Z
+      - lastTransitionTime: 2018-12-25T09:05:20Z
         status: "True"
         type: Admitted
       host: sonarqube-4d09-sonarqube.apps.na311.openshift.opentlc.com
@@ -332,8 +332,6 @@ objects:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftNewApp
-      pv.kubernetes.io/bind-completed: "yes"
-      pv.kubernetes.io/bound-by-controller: "yes"
     creationTimestamp: null
     finalizers:
     - kubernetes.io/pvc-protection
@@ -352,8 +350,6 @@ objects:
   kind: PersistentVolumeClaim
   metadata:
     annotations:
-      pv.kubernetes.io/bind-completed: "yes"
-      pv.kubernetes.io/bound-by-controller: "yes"
     creationTimestamp: null
     finalizers:
     - kubernetes.io/pvc-protection
@@ -365,3 +361,21 @@ objects:
       requests:
         storage: 4Gi
   status: {}
+- apiVersion: v1
+  data:
+    database-name: c29uYXI=
+    database-password: c29uYXI=
+    database-user: c29uYXI=
+  kind: Secret
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      template.openshift.io/expose-database_name: '{.data[''database-name'']}'
+      template.openshift.io/expose-password: '{.data[''database-password'']}'
+      template.openshift.io/expose-username: '{.data[''database-user'']}'
+    creationTimestamp: null
+    labels:
+      app: sonarqube_db
+      template: postgresql-persistent-template
+    name: postgresql
+  type: Opaque
