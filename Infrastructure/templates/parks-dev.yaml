@@ -1,0 +1,658 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: parks-dev
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    generation: 5
+    labels:
+      build: mlbparks
+    name: mlbparks
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0-0
+      generation: null
+      importPolicy: {}
+      name: 0.0-0
+      referencePolicy:
+        type: ""
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:latest
+      generation: 5
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+      openshift.io/image.dockerRepositoryCheck: 2018-12-25T11:32:19Z
+    creationTimestamp: null
+    generation: 3
+    labels:
+      type: parksmap-backend
+    name: nationalparks
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+      openshift.io/image.dockerRepositoryCheck: 2018-12-25T11:32:42Z
+    creationTimestamp: null
+    generation: 3
+    labels:
+      build: parksmap
+    name: parksmap
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: mlbparks
+      type: parksmap-backend
+    name: mlbparks
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: mlbparks
+      deploymentconfig: mlbparks
+      type: parksmap-backend
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        post:
+          execNewPod:
+            command:
+            - curl
+            - http://mlbparks.4d09-parks-dev.svc:8080/ws/data/load/
+            containerName: mlbparks
+          failurePolicy: Ignore
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: mlbparks
+          deploymentconfig: mlbparks
+          type: parksmap-backend
+      spec:
+        containers:
+        - image: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0-0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - echo
+              - ok
+            failureThreshold: 3
+            initialDelaySeconds: 40
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: mlbparks
+          ports:
+          - containerPort: 8778
+            protocol: TCP
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ws/healthz/
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers: []
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      template.alpha.openshift.io/wait-for-ready: "true"
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: mongodb-persistent
+      template: mongodb-persistent-template
+    name: mongodb
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      name: mongodb
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: mongodb-persistent
+          name: mongodb
+      spec:
+        containers:
+        - env:
+          - name: MONGODB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: mongodb
+          - name: MONGODB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: mongodb
+          - name: MONGODB_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-admin-password
+                name: mongodb
+          - name: MONGODB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: mongodb
+          image: docker-registry.default.svc:5000/openshift/mongodb@sha256:8fea1e4a7f3ae48a2e49b74eaa23b919cb7f4ce1d2a2037fc612769116c1e4e5
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 27017
+            timeoutSeconds: 1
+          name: mongodb
+          ports:
+          - containerPort: 27017
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -i
+              - -c
+              - mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD
+                --eval="quit()"
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 1Gi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mongodb/data
+            name: mongodb-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: mongodb
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - mongodb
+        from:
+          kind: ImageStreamTag
+          name: mongodb:3.2
+          namespace: openshift
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: nationalparks
+    name: nationalparks
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: nationalparks
+      deploymentconfig: nationalparks
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        post:
+          execNewPod:
+            command:
+            - curl
+            - http://nationalparks.4d09-parks-dev.svc:8080/ws/data/load/
+            containerName: nationalparks
+          failurePolicy: Ignore
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: nationalparks
+          deploymentconfig: nationalparks
+      spec:
+        containers:
+        - image: docker-registry.default.svc:5000/4d09-parks-dev/nationalparks:0.0-0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - echo
+              - ok
+            failureThreshold: 3
+            initialDelaySeconds: 40
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: nationalparks
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ws/healthz/
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers: []
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: parksmap
+    name: parksmap
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: parksmap
+      deploymentconfig: parksmap
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: parksmap
+          deploymentconfig: parksmap
+      spec:
+        containers:
+        - image: docker-registry.default.svc:5000/4d09-parks-dev/parksmap:0.0-0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - echo
+              - ok
+            failureThreshold: 3
+            initialDelaySeconds: 40
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: parksmap
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ws/healthz/
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers: []
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: mlbparks
+      type: parksmap-backend
+    name: mlbparks
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: 8443-tcp
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    - name: 8778-tcp
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
+    selector:
+      app: mlbparks
+      deploymentconfig: mlbparks
+      type: parksmap-backend
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      template.openshift.io/expose-uri: mongodb://{.spec.clusterIP}:{.spec.ports[?(.name=="mongo")].port}
+    creationTimestamp: null
+    labels:
+      app: mongodb-persistent
+      template: mongodb-persistent-template
+    name: mongodb
+  spec:
+    ports:
+    - name: mongo
+      port: 27017
+      protocol: TCP
+      targetPort: 27017
+    selector:
+      name: mongodb
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: nationalparks
+    name: nationalparks
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: nationalparks
+      deploymentconfig: nationalparks
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: parksmap
+    name: parksmap
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: parksmap
+      deploymentconfig: parksmap
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: null
+    labels:
+      app: mlbparks
+      type: parksmap-backend
+    name: mlbparks
+  spec:
+    host: mlbparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: mlbparks
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2018-12-25T11:31:58Z
+        status: "True"
+        type: Admitted
+      host: mlbparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
+      routerName: router
+      wildcardPolicy: None
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: null
+    labels:
+      app: nationalparks
+    name: nationalparks
+  spec:
+    host: nationalparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: nationalparks
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2018-12-25T11:32:20Z
+        status: "True"
+        type: Admitted
+      host: nationalparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
+      routerName: router
+      wildcardPolicy: None
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: null
+    labels:
+      app: parksmap
+    name: parksmap
+  spec:
+    host: parksmap-4d09-parks-dev.apps.na311.openshift.opentlc.com
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: parksmap
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2018-12-25T11:32:44Z
+        status: "True"
+        type: Admitted
+      host: parksmap-4d09-parks-dev.apps.na311.openshift.opentlc.com
+      routerName: router
+      wildcardPolicy: None
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: mongodb-persistent
+      template: mongodb-persistent-template
+    name: mongodb
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  status: {}
+- apiVersion: v1
+  data:
+    database-admin-password: YWRtaW4xMjM=
+    database-name: cGFya3M=
+    database-password: bW9uZ29kYg==
+    database-user: bW9uZ29kYg==
+  kind: Secret
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      template.openshift.io/expose-admin_password: '{.data[''database-admin-password'']}'
+      template.openshift.io/expose-database_name: '{.data[''database-name'']}'
+      template.openshift.io/expose-password: '{.data[''database-password'']}'
+      template.openshift.io/expose-username: '{.data[''database-user'']}'
+    creationTimestamp: null
+    labels:
+      app: mongodb-persistent
+      template: mongodb-persistent-template
+    name: mongodb
+  type: Opaque
