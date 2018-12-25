@@ -76,8 +76,14 @@ podTemplate(
         // Jenkins workspace
         // Replace xyz-parks-dev with the name of your dev project
         sh "oc delete bc mlbparks -n ${GUID}-parks-dev || true"
+
+        // Defining new build with new output target using Nexus mirror.
         sh "oc new-build --name=mlbparks --binary=true  jboss-eap70-openshift:1.7 --to=${GUID}-parks-dev/mlbparks:${devTag} -e MAVEN_MIRROR_URL=http://nexus3-${GUID}-nexus.apps.na311.openshift.opentlc.com/repository/maven-all-public -n ${GUID}-parks-dev"
+
+        // Start to build the new build definition using artifact uploaded to Nexus above.
         sh "oc start-build mlbparks --follow --from-file=http://nexus3.${GUID}-nexus.svc.cluster.local:8081/repository/releases/com/openshift/evg/roadshow/mlbparks/${version}/mlbparks-${version}.war -n ${GUID}-parks-dev"
+
+        // Tag image with latest build number as latest image.
         sh "oc tag mlbparks:${devTag} mlbparks:latest -n ${GUID}-parks-dev"
         
         // OLD CODE
