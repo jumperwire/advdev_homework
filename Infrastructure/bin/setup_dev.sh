@@ -15,3 +15,5 @@ echo "Setting up Parks Development Environment in project ${GUID}-parks-dev"
 oc new-project ${GUID}-parks-dev --display-name "Development Environment"
 
 oc policy add-role-to-user edit system:serviceaccount:${GUID}-jenkins:jenkins -n ${GUID}-parks-dev
+
+oc policy add-role-to-user view --serviceaccount=default -n 4d09-parks-dev
