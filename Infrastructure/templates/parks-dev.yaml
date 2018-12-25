@@ -9,33 +9,15 @@ objects:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftNewBuild
+      openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:48:51Z
     creationTimestamp: null
-    generation: 5
+    generation: 3
     labels:
       build: mlbparks
     name: mlbparks
   spec:
     lookupPolicy:
       local: false
-    tags:
-    - annotations: null
-      from:
-        kind: DockerImage
-        name: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:0.0-0
-      generation: null
-      importPolicy: {}
-      name: 0.0-0
-      referencePolicy:
-        type: ""
-    - annotations: null
-      from:
-        kind: DockerImage
-        name: docker-registry.default.svc:5000/4d09-parks-dev/mlbparks:latest
-      generation: 5
-      importPolicy: {}
-      name: latest
-      referencePolicy:
-        type: Source
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -43,7 +25,7 @@ objects:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftNewBuild
-      openshift.io/image.dockerRepositoryCheck: 2018-12-25T11:32:19Z
+      openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:49:11Z
     creationTimestamp: null
     generation: 3
     labels:
@@ -59,7 +41,7 @@ objects:
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftNewBuild
-      openshift.io/image.dockerRepositoryCheck: 2018-12-25T11:32:42Z
+      openshift.io/image.dockerRepositoryCheck: 2018-12-25T14:49:28Z
     creationTimestamp: null
     generation: 3
     labels:
@@ -129,13 +111,6 @@ objects:
             successThreshold: 1
             timeoutSeconds: 1
           name: mlbparks
-          ports:
-          - containerPort: 8778
-            protocol: TCP
-          - containerPort: 8080
-            protocol: TCP
-          - containerPort: 8443
-            protocol: TCP
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -445,8 +420,6 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    annotations:
-      openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     labels:
       app: mlbparks
@@ -454,18 +427,9 @@ objects:
     name: mlbparks
   spec:
     ports:
-    - name: 8080-tcp
-      port: 8080
+    - port: 8080
       protocol: TCP
       targetPort: 8080
-    - name: 8443-tcp
-      port: 8443
-      protocol: TCP
-      targetPort: 8443
-    - name: 8778-tcp
-      port: 8778
-      protocol: TCP
-      targetPort: 8778
     selector:
       app: mlbparks
       deploymentconfig: mlbparks
@@ -548,7 +512,7 @@ objects:
   spec:
     host: mlbparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
     port:
-      targetPort: 8080-tcp
+      targetPort: 8080
     to:
       kind: Service
       name: mlbparks
@@ -557,7 +521,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T11:31:58Z
+      - lastTransitionTime: 2018-12-25T14:48:53Z
         status: "True"
         type: Admitted
       host: mlbparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
@@ -584,7 +548,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T11:32:20Z
+      - lastTransitionTime: 2018-12-25T14:49:13Z
         status: "True"
         type: Admitted
       host: nationalparks-4d09-parks-dev.apps.na311.openshift.opentlc.com
@@ -611,7 +575,7 @@ objects:
   status:
     ingress:
     - conditions:
-      - lastTransitionTime: 2018-12-25T11:32:44Z
+      - lastTransitionTime: 2018-12-25T14:49:29Z
         status: "True"
         type: Admitted
       host: parksmap-4d09-parks-dev.apps.na311.openshift.opentlc.com
@@ -656,3 +620,120 @@ objects:
       template: mongodb-persistent-template
     name: mongodb
   type: Opaque
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    labels:
+      build: mlbparks
+    name: mlbparks
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: mlbparks:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: jboss-eap70-openshift:1.7
+          namespace: openshift
+      type: Source
+    successfulBuildsHistoryLimit: 5
+    triggers:
+    - github:
+        secret: L86LONZphiZKkwmd70R_
+      type: GitHub
+    - generic:
+        secret: yULRi1FCWrBH75myI9vI
+      type: Generic
+  status:
+    lastVersion: 0
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    labels:
+      type: parksmap-backend
+    name: nationalparks
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: nationalparks:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: redhat-openjdk18-openshift:1.2
+          namespace: openshift
+      type: Source
+    successfulBuildsHistoryLimit: 5
+    triggers:
+    - github:
+        secret: 7N9xl7AuBGFCSDXm81Sx
+      type: GitHub
+    - generic:
+        secret: 3HTG7SDJ7fYcz25BF2-s
+      type: Generic
+  status:
+    lastVersion: 0
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: null
+    labels:
+      build: parksmap
+    name: parksmap
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: parksmap:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: redhat-openjdk18-openshift:1.2
+          namespace: openshift
+      type: Source
+    successfulBuildsHistoryLimit: 5
+    triggers:
+    - github:
+        secret: G2y3EeIIJ0_pox3uGIst
+      type: GitHub
+    - generic:
+        secret: 4jycN-zaZXUMESvm74kB
+      type: Generic
+  status:
+    lastVersion: 0
